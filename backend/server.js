@@ -1,30 +1,38 @@
-const express = require('express');
-const cors = require('cors');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-require('dotenv').config();
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+  apiVersion: "v1"
+});
 
-app.post('/perguntar', async (req, res) => {
+app.post("/perguntar", async (req, res) => {
   const { pergunta } = req.body;
+
   if (!pergunta) {
-    return res.status(400).json({ erro: 'Pergunta não fornecida.' });
+    return res.status(400).json({ erro: "Pergunta não fornecida." });
   }
+
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-    const result = await model.generateContent(pergunta);
-    res.json({ resposta: result.response.text() });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: pergunta
+    });
+
+    res.json({ resposta: response.text });
+
   } catch (err) {
     console.error("ERRO GEMINI:", err);
-    res.status(500).json({ erro: 'Erro ao consultar o oráculo.' });
+    res.status(500).json({ erro: "Erro ao consultar o oráculo." });
   }
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+app.listen(3000, () => {
+  console.log("Servidor rodando na porta 3000");
 });
