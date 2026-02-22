@@ -15,7 +15,7 @@ app.post('/perguntar', async (req, res) => {
     return res.status(400).json({ erro: 'Pergunta não fornecida.' });
   }
   try {
-    const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
     const result = await model.generateContent(pergunta);
     res.json({ resposta: result.response.text() });
   } catch (err) {
