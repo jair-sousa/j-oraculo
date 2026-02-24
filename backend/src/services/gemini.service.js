@@ -2,7 +2,7 @@
  * gemini.service.js
  *
  * Camada de serviço responsável por:
- * - Construir o prompt do oráculo
+ * - Definir identidade do oráculo (system instruction)
  * - Definir parâmetros de geração
  * - Comunicar-se com a API do Gemini
  * - Implementar fallback em caso de indisponibilidade
@@ -10,34 +10,11 @@
  * Foco atual:
  * - Respostas concisas
  * - Alta densidade semântica
- * - Controle de tokens
+ * - Controle rigoroso de formato
  * - Resiliência básica (fallback para quota excedida)
  */
 
 const ai = require("../config/gemini.config");
-
-/**
- * Constrói o prompt base do oráculo.
- * Separar essa responsabilidade facilita ajustes futuros
- * e possível evolução para um prompt builder dedicado.
- *
- * @param {string} pergunta
- * @returns {string}
- */
-function construirPrompt(pergunta) {
-  return `
-Você é um oráculo filosófico conciso e enigmático.
-
-Responda de forma densa e simbólica.
-Use no máximo 80 palavras.
-Use no máximo 2 parágrafos curtos.
-Nunca utilize listas, tópicos ou numeração.
-Evite explicações didáticas ou exemplos.
-Finalize obrigatoriamente com uma pergunta reflexiva.
-
-Pergunta: ${pergunta}
-`;
-}
 
 /**
  * Gera resposta alternativa quando a API estiver indisponível.
@@ -52,44 +29,63 @@ function gerarRespostaFallback() {
 /**
  * Envia a pergunta ao modelo Gemini e retorna a resposta textual.
  *
- * Estratégia de otimização:
- * - Redução de temperatura para evitar expansão excessiva
- * - Redução de maxOutputTokens para forçar concisão
- * - Tratamento específico para erro 429 (quota excedida)
+ * Estratégia:
+ * - Uso de systemInstruction para reforçar identidade
+ * - Limitação forte de tokens
+ * - Redução de temperatura para evitar expansão
+ * - Proibição explícita de markdown e listas
+ * - Tratamento específico para erro 429
  *
  * @param {string} pergunta
  * @returns {Promise<string>}
  */
 async function perguntarAoGemini(pergunta) {
-  const prompt = construirPrompt(pergunta);
-
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
-      contents: prompt,
+
+      // Pergunta do usuário
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: pergunta }],
+        },
+      ],
+
+      // Identidade e regras fixas do oráculo
+      systemInstruction: {
+        parts: [
+          {
+            text: `
+Você é um oráculo filosófico conciso e enigmático.
+
+Responda com no máximo 80 palavras.
+Use no máximo 2 parágrafos curtos.
+Nunca utilize listas, tópicos, numeração ou markdown.
+Não use negrito, itálico ou qualquer formatação.
+Evite explicações didáticas ou enciclopédicas.
+Finalize obrigatoriamente com uma pergunta reflexiva.
+`,
+          },
+        ],
+      },
+
       config: {
-        maxOutputTokens: 110,
-        temperature: 0.65
-      }
+        maxOutputTokens: 100,
+        temperature: 0.6,
+      },
     });
 
-    return String(response.text).trim();
-
+    return response.text.trim();
   } catch (error) {
-
     /**
      * Tratamento específico para quota excedida (HTTP 429).
-     * Ativa fallback sem derrubar o sistema.
      */
     if (error?.status === 429 || error?.error?.code === 429) {
       console.warn("Quota excedida. Fallback ativado.");
       return gerarRespostaFallback();
     }
 
-    /**
-     * Outros erros continuam sendo tratados
-     * pelo middleware global.
-     */
     throw error;
   }
 }
