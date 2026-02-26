@@ -1,185 +1,218 @@
 # 🔮 J_Oraculo
 
-Backend e frontend integrados para geração de respostas filosóficas utilizando a API Google Gemini.  
-O projeto foi desenvolvido com foco em arquitetura em camadas, controle de geração de tokens e organização modular.
+O **J_Oraculo** é uma aplicação fullstack baseada em Inteligência Artificial capaz de gerar respostas filosóficas reflexivas utilizando o **Google Gemini**.
+
+O projeto evoluiu de uma aplicação em JavaScript puro para uma arquitetura moderna distribuída, seguindo boas práticas de engenharia de software, separação de responsabilidades e deploy em cloud.
 
 ---
 
-## 📌 Objetivo do Projeto
+## 🌐 Aplicação em Produção
 
-Criar um “Oráculo Digital” capaz de:
+Frontend (Vercel)  
+👉 https://j-oraculo.vercel.app  
+
+Backend (Render)  
+👉 https://j-oraculo-backend.onrender.com  
+
+Health Check  
+👉 https://j-oraculo-backend.onrender.com/health  
+
+---
+
+## 🎯 Objetivo do Projeto
+
+Criar um **Oráculo Digital** capaz de:
 
 - Gerar respostas filosóficas densas e provocativas
-- Controlar tamanho da resposta
-- Controlar parâmetros de geração (temperature, maxOutputTokens)
-- Reduzir riscos de truncamento por limite de tokens
-- Organizar backend em arquitetura escalável
+- Controlar parâmetros de geração da IA
+- Reduzir consumo de tokens
+- Manter previsibilidade das respostas
+- Aplicar arquitetura escalável fullstack
 
 O projeto também serve como estudo prático de:
 
 - Integração com LLM
-- Engenharia de prompt
-- Estruturação de backend profissional
-- Separação clara de responsabilidades
+- Engenharia de Prompt
+- Arquitetura Backend
+- Frontend moderno com Next.js
+- Deploy distribuído em cloud
 
 ---
 
-## 🏗 Arquitetura Backend
+## 🏗 Arquitetura Atual
+
+```
+Frontend (Next.js - Vercel)
+        ↓
+Backend (Node.js + Express - Render)
+        ↓
+Google Gemini API
+```
+
+---
+
+## 🧩 Estrutura do Projeto
+
+```
+J-ORACULO/
+│
+├── backend/     → API Node.js + Express
+├── frontend/    → Next.js (App Router)
+├── legacy/      → versão inicial arquivada
+└── README.md
+```
+
+---
+
+## ⚙️ Backend
 
 O backend segue arquitetura em camadas:
 
-Request  
-→ Route  
-→ Controller  
-→ Service  
-→ Gemini API  
-→ Response  
-
-### Estrutura
-
-backend/
- ├── src/
- │    ├── config/
- │    │     └── gemini.config.js
- │    ├── controllers/
- │    │     └── oraculo.controller.js
- │    ├── services/
- │    │     └── gemini.service.js
- │    ├── routes/
- │    │     └── oraculo.routes.js
- │    ├── middlewares/
- │    │     └── error.middleware.js
- │    └── server.js
- ├── .env
- ├── package.json
+```
+Request
+ → Route
+ → Controller
+ → Service
+ → Gemini API
+ → Response
+```
 
 ### Responsabilidades
 
-- Config → instancia cliente Gemini
-- Controller → valida requisição HTTP
-- Service → constrói prompt e chama API
-- Middleware → trata erros globais
-- Server → inicializa aplicação
+- **Config** → instancia cliente Gemini  
+- **Controller** → valida requisição HTTP  
+- **Service** → constrói prompt e chama IA  
+- **Middleware** → tratamento global de erros  
+- **Server** → inicialização da aplicação  
 
 ---
 
-## 🤖 Integração com Gemini
+## 🤖 Integração com IA
 
-Modelo atual:
+Modelo utilizado:
 
+```
 gemini-2.0-flash
+```
 
 Configuração principal:
 
-- maxOutputTokens: 200
-- temperature: 0.85
+- `temperature`: 0.85
+- `maxOutputTokens`: 200
 
-Estratégia de prompt:
+Estratégias aplicadas:
 
-- Linguagem filosófica
-- 2 parágrafos
-- Sem listas
-- Finalização com pergunta reflexiva
-- Limite explícito de palavras
-
-Motivação técnica:
-
-- Evitar truncamento por MAX_TOKENS
-- Reduzir consumo excessivo de thinking tokens
-- Manter previsibilidade na resposta
+- Controle explícito de tamanho da resposta
+- Redução de truncamento
+- Otimização de consumo de tokens
+- Prompt estruturado filosófico
 
 ---
 
-## 🎤 Funcionalidades do Frontend
+## 🎨 Frontend
 
-- Envio de perguntas via formulário
-- Entrada por voz (Web Speech API)
-- Barra de progresso durante geração
-- Interface responsiva
-- Comunicação assíncrona com backend via fetch
+Tecnologias utilizadas:
 
----
+- Next.js 16 (App Router)
+- TypeScript
+- TailwindCSS
+- Feature-based architecture
 
-## 🚀 Como Executar
+Funcionalidades:
 
-### Pré-requisitos
-
-- Node.js instalado
-- Chave da API Gemini
-
-### Configuração
-
-Crie um arquivo `.env` dentro da pasta `backend`:
-
-GEMINI_API_KEY=sua_chave_aqui
-
-### Instalação
-
-cd backend  
-npm install  
-node server.js  
-
-Abra `index.html` no navegador.
-
-Servidor padrão:
-
-http://localhost:3000
-
-Endpoint principal:
-
-POST /perguntar
-
-Body esperado:
-
-{
-  "pergunta": "Sua pergunta aqui"
-}
+- Envio manual de perguntas
+- Reconhecimento de voz (Web Speech API)
+- Histórico em memória
+- Controle de loading
+- Tratamento de erros
+- Comunicação assíncrona com backend
 
 ---
 
-## 🛠 Tecnologias Utilizadas
+## 🧱 Infraestrutura
 
-Backend:
-- Node.js
-- Express
-- Google Gemini API
+- Deploy Frontend: **Vercel**
+- Deploy Backend: **Render**
+- Endpoint `/health` para monitoramento
+- Keep-alive configurado para evitar cold start
+- Integração contínua via GitHub
 
-Frontend:
+---
+
+## 🗃 Frontend Legado
+
+A primeira versão do projeto foi desenvolvida utilizando:
+
 - HTML
 - CSS
 - JavaScript Vanilla
-- Web Speech API
+
+Após migração para Next.js, essa versão foi arquivada em:
+
+```
+/legacy
+```
+
+Mantida apenas para fins históricos e estudo da evolução arquitetural do projeto.
 
 ---
 
-## 📈 Próximos Passos (Evolução Arquitetural)
+## 🚀 Executar Localmente
 
-Planejamento de evolução do projeto:
+### Backend
 
-- Implementação de cache para reduzir consumo da API
-- Rate limiting para proteção contra abuso
-- Fallback estratégico em caso de erro de quota
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+Servidor disponível em:
+
+```
+http://localhost:3000
+```
+
+---
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Aplicação disponível em:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 📈 Evolução Planejada
+
+Próximas etapas arquiteturais:
+
+- Persistência de conversas
+- Autenticação de usuários
+- Memória conversacional IA
+- Streaming de respostas em tempo real
+- Rate limiting
 - Logs estruturados
-- Testes automatizados
-- Deploy em ambiente cloud (Render)
-- Evolução para arquitetura escalável
-- Possível transformação em micro SaaS
-
----
-
-## 🎯 Objetivo Profissional
-
-Este projeto foi desenvolvido como parte da construção de portfólio backend, com foco em:
-
-- Boas práticas arquiteturais
-- Separação de responsabilidades
-- Integração com IA
-- Controle de custo e geração
+- Observabilidade
+- Transformação em Micro SaaS
 
 ---
 
 ## 👨‍💻 Autor
 
-Jair Sousa  
-Estudante de Análise e Desenvolvimento de Sistemas  
-Foco em Backend, Node.js e Arquitetura de Software
+**Jair Sousa**  
+Formado em Análise e Desenvolvimento de Sistemas  
+
+Foco em:
+- Backend Development
+- Node.js
+- Arquitetura de Software
+- Integração com Inteligência Artificial
