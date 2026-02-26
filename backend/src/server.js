@@ -26,6 +26,19 @@ app.use(cors());
 app.use(express.json());
 
 /**
+ * Health Check
+ * Endpoint utilizado para monitoramento e keep-alive do servidor.
+ * NÃO consome recursos externos (ex: Gemini).
+ */
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "j-oraculo-backend",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+/**
  * Registro de rotas
  */
 app.use("/", oraculoRoutes);
