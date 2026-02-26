@@ -43,21 +43,51 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+
       <textarea
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
         placeholder="Digite sua pergunta..."
-        className="border rounded p-3 resize-none"
         rows={3}
         disabled={isLoading}
+        className="
+          w-full
+          bg-zinc-950
+          border border-zinc-800
+          rounded-xl
+          p-4
+          text-sm
+          resize-none
+          outline-none
+          transition-all
+          duration-200
+          focus:border-zinc-600
+          focus:ring-1
+          focus:ring-zinc-700
+          disabled:opacity-60
+        "
       />
 
-      <div className="flex gap-2">
+      <div className="flex justify-center gap-4">
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-black text-white py-2 px-4 rounded disabled:opacity-50"
+          className="
+            min-w-[120px]
+            px-5 py-2
+            bg-white
+            text-black
+            rounded-lg
+            font-medium
+            cursor-pointer
+            hover:bg-zinc-200
+            active:scale-95
+            transition-all
+            duration-150
+            disabled:opacity-50
+            disabled:cursor-not-allowed
+          "
         >
           {isLoading ? "Consultando..." : "Perguntar"}
         </button>
@@ -68,11 +98,24 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
           onMouseUp={stop}
           onMouseLeave={stop}
           disabled={isLoading}
-          className="border py-2 px-4 rounded"
+          className="
+            min-w-[120px]
+            px-5 py-2
+            border border-zinc-700
+            rounded-lg
+            cursor-pointer
+            hover:bg-zinc-800
+            active:scale-95
+            transition-all
+            duration-150
+            disabled:opacity-50
+            disabled:cursor-not-allowed
+          "
         >
           {isRecording ? "Gravando..." : "Falar"}
         </button>
       </div>
+
     </form>
   );
 }
