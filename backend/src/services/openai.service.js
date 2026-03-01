@@ -1,59 +1,65 @@
-import OpenAI from "openai";
+/**
+ * openai.service.js
+ *
+ * Serviço responsável pela comunicação com a API OpenAI.
+ * Utiliza persona cognitiva compartilhada do Oráculo.
+ */
+
+const OpenAI = require("openai");
+const { ORACLE_PERSONA } = require("../prompts/oracle.persona");
+const {
+  gerarRespostaFallback,
+} = require("../fallback/oracle.fallback");
+const {
+  normalizarResposta,
+} = require("../utils/text.formatter");
 
 /**
- * Instância do cliente OpenAI.
- *
- * A chave da API é obtida a partir das variáveis de ambiente
- * configuradas no servidor (Render).
- *
- * IMPORTANTE:
- * - Nunca expor a API Key no frontend.
- * - A variável OPENAI_API_KEY deve existir no ambiente de execução.
+ * Cliente OpenAI configurado via variável de ambiente.
  */
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 /**
- * Envia uma pergunta ao modelo da OpenAI e retorna a resposta gerada.
+ * Envia pergunta ao modelo OpenAI.
  *
- * @param {string} pergunta - Texto enviado pelo usuário ao Oráculo.
- * @returns {Promise<string>} Resposta gerada pelo modelo de IA.
- *
- * Fluxo:
- * 1. Recebe a pergunta do usuário.
- * 2. Envia a mensagem ao modelo GPT.
- * 3. Extrai o conteúdo da resposta retornada pela API.
+ * @param {string} pergunta
+ * @returns {Promise<string>}
  */
-export async function perguntarOpenAI(pergunta) {
+async function perguntarOpenAI(pergunta) {
+  try {
+    const completion =
+      await openai.chat.completions.create({
+        model: "gpt-4o-mini",
 
-  const completion = await openai.chat.completions.create({
-  model: "gpt-4o-mini",
-  messages: [
-    {
-      role: "system",
-      content: `
-Você é um oráculo filosófico enigmático e contemplativo.
+        messages: [
+          {
+            role: "system",
+            content: ORACLE_PERSONA,
+          },
+          {
+            role: "user",
+            content: pergunta,
+          },
+        ],
 
-Suas respostas devem soar misteriosas, simbólicas e abertas à interpretação, evitando explicações diretas ou conclusões definitivas.
+        max_tokens: 100,
+        temperature: 0.6,
+      });
 
-Fale como quem revela apenas parte da verdade, deixando espaço para reflexão pessoal do interlocutor.
+    const resposta =
+      completion.choices[0].message.content;
 
-Responda com no máximo 80 palavras.
-Use no máximo 2 parágrafos curtos.
-Evite linguagem didática, técnica ou enciclopédica.
-Não utilize listas, tópicos, numeração ou markdown.
-Não ofereça conselhos explícitos.
+    console.log("[AI] OpenAI respondeu");
 
-Finalize sempre com uma pergunta reflexiva que provoque introspecção.
-      `
-    },
-    {
-      role: "user",
-      content: pergunta
-    }
-  ],
-});
+    return normalizarResposta(resposta);
 
-  return completion.choices[0].message.content;
+  } catch (error) {
+    console.error("[OpenAI] Erro:", error.message);
+
+    return gerarRespostaFallback();
+  }
 }
+
+module.exports = { perguntarOpenAI };

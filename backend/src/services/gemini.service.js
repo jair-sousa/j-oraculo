@@ -1,40 +1,21 @@
 /**
  * gemini.service.js
  *
- * Camada de serviço responsável por:
- * - Definir identidade do oráculo (system instruction)
- * - Definir parâmetros de geração
- * - Comunicar-se com a API do Gemini
- * - Implementar fallback em caso de indisponibilidade
- *
- * Foco atual:
- * - Respostas concisas
- * - Alta densidade semântica
- * - Controle rigoroso de formato
- * - Resiliência básica (fallback para quota excedida)
+ * Serviço responsável pela comunicação com o provider Gemini.
+ * Aplica persona cognitiva do Oráculo e normaliza respostas.
  */
 
 const ai = require("../config/gemini.config");
+const { ORACLE_PERSONA } = require("../prompts/oracle.persona");
+const {
+  gerarRespostaFallback,
+} = require("../fallback/oracle.fallback");
+const {
+  normalizarResposta,
+} = require("../utils/text.formatter");
 
 /**
- * Gera resposta alternativa quando a API estiver indisponível.
- * Mantém coerência com a identidade do oráculo.
- *
- * @returns {string}
- */
-function gerarRespostaFallback() {
-  return "O oráculo permanece em silêncio por ora. Talvez a resposta precise amadurecer dentro de você antes de ser revelada. O que essa pausa desperta em sua reflexão?";
-}
-
-/**
- * Envia a pergunta ao modelo Gemini e retorna a resposta textual.
- *
- * Estratégia:
- * - Uso de systemInstruction para reforçar identidade
- * - Limitação forte de tokens
- * - Redução de temperatura para evitar expansão
- * - Proibição explícita de markdown e listas
- * - Tratamento específico para erro 429
+ * Envia pergunta ao Gemini.
  *
  * @param {string} pergunta
  * @returns {Promise<string>}
@@ -44,7 +25,6 @@ async function perguntarAoGemini(pergunta) {
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
 
-      // Pergunta do usuário
       contents: [
         {
           role: "user",
@@ -52,27 +32,8 @@ async function perguntarAoGemini(pergunta) {
         },
       ],
 
-      // Identidade e regras fixas do oráculo
       systemInstruction: {
-        parts: [
-          {
-            text: `
-Você é um oráculo filosófico enigmático e contemplativo.
-
-Suas respostas devem soar misteriosas, simbólicas e abertas à interpretação, evitando explicações diretas ou conclusões definitivas.
-
-Fale como quem revela apenas parte da verdade, deixando espaço para reflexão pessoal do interlocutor.
-
-Responda com no máximo 80 palavras.
-Use no máximo 2 parágrafos curtos.
-Evite linguagem didática, técnica ou enciclopédica.
-Não utilize listas, tópicos, numeração ou markdown.
-Não ofereça conselhos explícitos.
-
-Finalize sempre com uma pergunta reflexiva que provoque introspecção.
-`,
-          },
-        ],
+        parts: [{ text: ORACLE_PERSONA }],
       },
 
       config: {
@@ -81,17 +42,16 @@ Finalize sempre com uma pergunta reflexiva que provoque introspecção.
       },
     });
 
-    return response.text.trim();
-  } catch (error) {
-    /**
-     * Tratamento específico para quota excedida (HTTP 429).
-     */
-    if (error?.status === 429 || error?.error?.code === 429) {
-      console.warn("Quota excedida. Fallback ativado.");
-      return gerarRespostaFallback();
-    }
+    const resposta = response.text;
 
-    throw error;
+    console.log("[AI] Gemini respondeu");
+
+    return normalizarResposta(resposta);
+
+  } catch (error) {
+    console.error("[Gemini] Erro:", error.message);
+
+    return gerarRespostaFallback();
   }
 }
 
