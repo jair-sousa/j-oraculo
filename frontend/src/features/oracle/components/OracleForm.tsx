@@ -12,15 +12,14 @@ type OracleFormProps = {
 };
 
 /**
- * Formulário principal da feature.
+ * Interface ritualística de consulta ao J-Oráculo.
  *
- * Responsável por:
- * - Capturar pergunta digitada
- * - Disparar envio manual
- * - Integrar reconhecimento de voz
+ * Representa o ponto de interação entre usuário
+ * e a consciência interpretativa do sistema.
  */
 export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
   const [question, setQuestion] = useState<string>("");
+
   const { start, stop, isRecording } = useSpeechRecognition();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -45,10 +44,17 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
+      {/* Orientação Cognitiva */}
+      <p className="text-center text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
+        O Oráculo não oferece respostas objetivas.
+        Ele observa intenções ocultas nas perguntas.
+      </p>
+
+      {/* Campo de Consulta */}
       <textarea
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
-        placeholder="Digite sua pergunta..."
+        placeholder="Revele sua inquietação..."
         rows={3}
         disabled={isLoading}
         className="
@@ -61,7 +67,7 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
           resize-none
           outline-none
           transition-all
-          duration-200
+          duration-300
           focus:border-zinc-600
           focus:ring-1
           focus:ring-zinc-700
@@ -69,13 +75,27 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
         "
       />
 
-      <div className="flex justify-center gap-4">
+      {/* Ações */}
+      <div
+        className="
+          flex
+          flex-col
+          sm:flex-row
+          justify-center
+          gap-3
+        "
+      >
+
+        {/* Ação principal */}
         <button
           type="submit"
           disabled={isLoading}
           className="
-            min-w-[120px]
-            px-5 py-2
+            w-full
+            sm:w-auto
+            sm:min-w-[180px]
+            px-6
+            py-3
             bg-white
             text-black
             rounded-lg
@@ -89,9 +109,12 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
             disabled:cursor-not-allowed
           "
         >
-          {isLoading ? "Consultando..." : "Perguntar"}
+          {isLoading
+            ? "Interpretando intenção..."
+            : "Consultar o Oráculo"}
         </button>
 
+        {/* Ação secundária */}
         <button
           type="button"
           onMouseDown={handleVoiceInput}
@@ -99,9 +122,13 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
           onMouseLeave={stop}
           disabled={isLoading}
           className="
-            min-w-[120px]
-            px-5 py-2
-            border border-zinc-700
+            w-full
+            sm:w-auto
+            sm:min-w-[160px]
+            px-6
+            py-3
+            border
+            border-zinc-700
             rounded-lg
             cursor-pointer
             hover:bg-zinc-800
@@ -112,9 +139,17 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
             disabled:cursor-not-allowed
           "
         >
-          {isRecording ? "Gravando..." : "Falar"}
+          {isRecording
+            ? "O Oráculo escuta..."
+            : "Sussurrar"}
         </button>
+
       </div>
+
+      {/* Presença silenciosa */}
+      <span className="text-center text-[11px] text-zinc-600">
+        O Oráculo aguarda.
+      </span>
 
     </form>
   );
