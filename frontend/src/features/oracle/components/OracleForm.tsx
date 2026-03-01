@@ -42,10 +42,10 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
 
       {/* Orientação Cognitiva */}
-      <p className="text-center text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
+      <p className="text-center text-xs text-zinc-400 leading-relaxed max-w-md mx-auto">
         O Oráculo não oferece respostas objetivas.
         Ele observa intenções ocultas nas perguntas.
       </p>
@@ -59,18 +59,21 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
         disabled={isLoading}
         className="
           w-full
-          bg-zinc-950
-          border border-zinc-800
+          bg-zinc-900/70
+          backdrop-blur-sm
+          border border-zinc-700
           rounded-xl
           p-4
           text-sm
+          text-zinc-200
+          placeholder:text-zinc-500
           resize-none
           outline-none
           transition-all
           duration-300
-          focus:border-zinc-600
+          focus:border-indigo-400
           focus:ring-1
-          focus:ring-zinc-700
+          focus:ring-indigo-400/40
           disabled:opacity-60
         "
       />
@@ -101,12 +104,13 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
             rounded-lg
             font-medium
             cursor-pointer
+            transition-all
+            duration-200
             hover:bg-zinc-200
             active:scale-95
-            transition-all
-            duration-150
             disabled:opacity-50
             disabled:cursor-not-allowed
+            shadow-md
           "
         >
           {isLoading
@@ -127,14 +131,13 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
             sm:min-w-[160px]
             px-6
             py-3
-            border
-            border-zinc-700
+            border border-zinc-600
             rounded-lg
             cursor-pointer
+            transition-all
+            duration-200
             hover:bg-zinc-800
             active:scale-95
-            transition-all
-            duration-150
             disabled:opacity-50
             disabled:cursor-not-allowed
           "
@@ -147,7 +150,7 @@ export function OracleForm({ onSubmit, isLoading }: OracleFormProps) {
       </div>
 
       {/* Presença silenciosa */}
-      <span className="text-center text-[11px] text-zinc-600">
+      <span className="text-center text-[11px] text-zinc-500">
         O Oráculo aguarda.
       </span>
 
