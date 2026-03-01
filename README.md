@@ -1,8 +1,8 @@
-# 🔮 J_Oraculo
+# 🔮 J_Oráculo
 
-O **J_Oraculo** é uma aplicação fullstack baseada em **Large Language Models (LLMs)** capaz de gerar respostas filosóficas reflexivas através de uma arquitetura cognitiva desacoplada de provedores de Inteligência Artificial.
+O **J_Oráculo** é uma aplicação Fullstack baseada em **Large Language Models (LLMs)** projetada como uma **Consciência Artificial Temática**, capaz de interpretar perguntas humanas e gerar respostas filosóficas reflexivas.
 
-O projeto evoluiu de uma aplicação em JavaScript puro para uma arquitetura moderna distribuída, seguindo princípios reais de engenharia de software, separação de responsabilidades e deploy contínuo em cloud.
+Diferente de chatbots tradicionais, o sistema não busca responder objetivamente, mas reinterpretar questões através de uma identidade cognitiva consistente definida por engenharia de prompt e arquitetura desacoplada de provedores de Inteligência Artificial.
 
 ---
 
@@ -21,26 +21,48 @@ Health Check
 
 ## 🎯 Objetivo do Projeto
 
-Criar um **Oráculo Digital** capaz de:
+Construir um **Oráculo Digital** capaz de:
 
-- Gerar respostas filosóficas densas e reflexivas
-- Manter identidade comportamental consistente
-- Controlar consumo de tokens
-- Garantir previsibilidade textual
+- Interpretar perguntas como metáforas existenciais
+- Manter identidade cognitiva persistente
 - Operar com múltiplos provedores de IA
+- Controlar consumo de tokens
+- Garantir previsibilidade comportamental
 - Aplicar arquitetura fullstack escalável
 
-O projeto também serve como estudo prático de:
+O projeto também funciona como estudo prático de:
 
 - Integração com LLMs
-- Engenharia de Prompt
+- Prompt Engineering
 - Arquitetura Backend
-- Frontend moderno com Next.js
+- Human–AI Interaction
 - Deploy distribuído em cloud
 
 ---
 
-## 🏗 Arquitetura Atual
+## 🧠 Experiência Cognitiva
+
+O J-Oráculo foi projetado como uma **entidade digital**, não apenas uma interface de perguntas e respostas.
+
+A interação segue um fluxo experiencial:
+
+```
+Usuário consulta
+ → Oráculo interpreta
+ → Presença cognitiva reage
+ → Resposta manifesta-se
+```
+
+Elementos introduzidos:
+
+- Presença visual do Oráculo
+- Estados cognitivos de interpretação
+- Manifestação progressiva da resposta
+- Interface contemplativa orientada à percepção
+
+---
+
+## 🏗 Arquitetura Geral
 
 ```
 Frontend (Next.js - Vercel)
@@ -56,16 +78,14 @@ AI Cognitive Layer
 
 ## 🧠 Camada Cognitiva do Oráculo
 
-O J-Oráculo utiliza uma arquitetura **provider-agnostic**, onde a identidade da IA é independente do modelo utilizado.
-
-A personalidade do Oráculo é definida por uma **Persona Cognitiva centralizada**, garantindo consistência mesmo com múltiplos provedores.
+Arquitetura **provider-agnostic**, onde a identidade da IA é independente do modelo utilizado.
 
 ### Componentes Cognitivos
 
 - **Persona** → identidade filosófica do Oráculo
 - **AI Services** → comunicação com provedores
 - **Formatter** → normalização textual das respostas
-- **Fallback** → resiliência em falhas de provider
+- **Fallback** → resiliência entre providers
 
 Fluxo interno:
 
@@ -120,13 +140,11 @@ HTTP Request
 
 ### Responsabilidades
 
-- **Config** → instancia clientes de IA
-- **Controller** → valida requisições HTTP
-- **Service** → comunicação com IA
-- **Persona** → identidade cognitiva
-- **Fallback** → resiliência
-- **Middleware** → tratamento global de erros
-- **Server** → inicialização da aplicação
+- Configuração de clientes de IA
+- Validação de requisições HTTP
+- Comunicação com provedores LLM
+- Controle de identidade cognitiva
+- Tratamento global de erros
 
 ---
 
@@ -142,8 +160,8 @@ Características aplicadas:
 - Prompt Engineering centralizado
 - Controle de tamanho de resposta
 - Redução de consumo de tokens
-- Identidade comportamental persistente
 - Independência de provider
+- Consistência comportamental
 
 ---
 
@@ -154,15 +172,15 @@ Tecnologias utilizadas:
 - Next.js (App Router)
 - TypeScript
 - TailwindCSS
-- Feature-based architecture
+- Feature-Based Architecture
 
 Funcionalidades:
 
-- Envio manual de perguntas
+- Consulta textual
 - Reconhecimento de voz (Web Speech API)
 - Histórico em memória
-- Estados de loading
-- Tratamento de erros
+- Estados cognitivos visuais
+- Resposta emergente animada
 - Comunicação assíncrona com backend
 
 ---
@@ -172,7 +190,6 @@ Funcionalidades:
 - Deploy Frontend: **Vercel**
 - Deploy Backend: **Render**
 - Endpoint `/health` para monitoramento
-- Keep-alive contra cold start
 - CI/CD automático via GitHub
 - Ambiente distribuído em cloud
 
@@ -185,7 +202,7 @@ Funcionalidades:
 - Provider-Agnostic AI Integration
 - Prompt Engineering Centralizado
 - Resiliência via Fallback
-- Deploy Contínuo (CI/CD)
+- Continuous Deployment
 
 ---
 
@@ -242,8 +259,6 @@ http://localhost:3000
 ---
 
 ## 📈 Evolução Planejada
-
-Próximas etapas arquiteturais:
 
 - Persistência de conversas
 - Memória conversacional IA
