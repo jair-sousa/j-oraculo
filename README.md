@@ -1,8 +1,8 @@
 # 🔮 J_Oraculo
 
-O **J_Oraculo** é uma aplicação fullstack baseada em Inteligência Artificial capaz de gerar respostas filosóficas reflexivas utilizando o **Google Gemini**.
+O **J_Oraculo** é uma aplicação fullstack baseada em **Large Language Models (LLMs)** capaz de gerar respostas filosóficas reflexivas através de uma arquitetura cognitiva desacoplada de provedores de Inteligência Artificial.
 
-O projeto evoluiu de uma aplicação em JavaScript puro para uma arquitetura moderna distribuída, seguindo boas práticas de engenharia de software, separação de responsabilidades e deploy em cloud.
+O projeto evoluiu de uma aplicação em JavaScript puro para uma arquitetura moderna distribuída, seguindo princípios reais de engenharia de software, separação de responsabilidades e deploy contínuo em cloud.
 
 ---
 
@@ -23,15 +23,16 @@ Health Check
 
 Criar um **Oráculo Digital** capaz de:
 
-- Gerar respostas filosóficas densas e provocativas
-- Controlar parâmetros de geração da IA
-- Reduzir consumo de tokens
-- Manter previsibilidade das respostas
-- Aplicar arquitetura escalável fullstack
+- Gerar respostas filosóficas densas e reflexivas
+- Manter identidade comportamental consistente
+- Controlar consumo de tokens
+- Garantir previsibilidade textual
+- Operar com múltiplos provedores de IA
+- Aplicar arquitetura fullstack escalável
 
 O projeto também serve como estudo prático de:
 
-- Integração com LLM
+- Integração com LLMs
 - Engenharia de Prompt
 - Arquitetura Backend
 - Frontend moderno com Next.js
@@ -44,9 +45,38 @@ O projeto também serve como estudo prático de:
 ```
 Frontend (Next.js - Vercel)
         ↓
-Backend (Node.js + Express - Render)
+Backend API (Node.js + Express - Render)
         ↓
-Google Gemini API
+AI Cognitive Layer
+        ├── Google Gemini
+        └── OpenAI GPT
+```
+
+---
+
+## 🧠 Camada Cognitiva do Oráculo
+
+O J-Oráculo utiliza uma arquitetura **provider-agnostic**, onde a identidade da IA é independente do modelo utilizado.
+
+A personalidade do Oráculo é definida por uma **Persona Cognitiva centralizada**, garantindo consistência mesmo com múltiplos provedores.
+
+### Componentes Cognitivos
+
+- **Persona** → identidade filosófica do Oráculo
+- **AI Services** → comunicação com provedores
+- **Formatter** → normalização textual das respostas
+- **Fallback** → resiliência em falhas de provider
+
+Fluxo interno:
+
+```
+Request
+ → Route
+ → Controller
+ → AI Service
+ → Provider (Gemini | OpenAI)
+ → Text Formatter
+ → Response
 ```
 
 ---
@@ -56,9 +86,19 @@ Google Gemini API
 ```
 J-ORACULO/
 │
-├── backend/     → API Node.js + Express
-├── frontend/    → Next.js (App Router)
-├── legacy/      → versão inicial arquivada
+├── backend/
+│   └── src/
+│       ├── config/
+│       ├── controllers/
+│       ├── routes/
+│       ├── services/
+│       ├── prompts/
+│       ├── fallback/
+│       ├── utils/
+│       └── server.js
+│
+├── frontend/
+├── legacy/
 └── README.md
 ```
 
@@ -69,43 +109,41 @@ J-ORACULO/
 O backend segue arquitetura em camadas:
 
 ```
-Request
+HTTP Request
  → Route
  → Controller
  → Service
- → Gemini API
- → Response
+ → Provider IA
+ → Formatter
+ → HTTP Response
 ```
 
 ### Responsabilidades
 
-- **Config** → instancia cliente Gemini  
-- **Controller** → valida requisição HTTP  
-- **Service** → constrói prompt e chama IA  
-- **Middleware** → tratamento global de erros  
-- **Server** → inicialização da aplicação  
+- **Config** → instancia clientes de IA
+- **Controller** → valida requisições HTTP
+- **Service** → comunicação com IA
+- **Persona** → identidade cognitiva
+- **Fallback** → resiliência
+- **Middleware** → tratamento global de erros
+- **Server** → inicialização da aplicação
 
 ---
 
-## 🤖 Integração com IA
+## 🤖 Integração com Inteligência Artificial
 
-Modelo utilizado:
+Provedores suportados:
 
-```
-gemini-2.0-flash
-```
+- **Google Gemini** (`gemini-2.0-flash`)
+- **OpenAI GPT** (`gpt-4o-mini`)
 
-Configuração principal:
+Características aplicadas:
 
-- `temperature`: 0.85
-- `maxOutputTokens`: 200
-
-Estratégias aplicadas:
-
-- Controle explícito de tamanho da resposta
-- Redução de truncamento
-- Otimização de consumo de tokens
-- Prompt estruturado filosófico
+- Prompt Engineering centralizado
+- Controle de tamanho de resposta
+- Redução de consumo de tokens
+- Identidade comportamental persistente
+- Independência de provider
 
 ---
 
@@ -113,7 +151,7 @@ Estratégias aplicadas:
 
 Tecnologias utilizadas:
 
-- Next.js 16 (App Router)
+- Next.js (App Router)
 - TypeScript
 - TailwindCSS
 - Feature-based architecture
@@ -123,7 +161,7 @@ Funcionalidades:
 - Envio manual de perguntas
 - Reconhecimento de voz (Web Speech API)
 - Histórico em memória
-- Controle de loading
+- Estados de loading
 - Tratamento de erros
 - Comunicação assíncrona com backend
 
@@ -134,8 +172,20 @@ Funcionalidades:
 - Deploy Frontend: **Vercel**
 - Deploy Backend: **Render**
 - Endpoint `/health` para monitoramento
-- Keep-alive configurado para evitar cold start
-- Integração contínua via GitHub
+- Keep-alive contra cold start
+- CI/CD automático via GitHub
+- Ambiente distribuído em cloud
+
+---
+
+## 🧩 Princípios Arquiteturais Aplicados
+
+- Separation of Concerns
+- Clean Architecture
+- Provider-Agnostic AI Integration
+- Prompt Engineering Centralizado
+- Resiliência via Fallback
+- Deploy Contínuo (CI/CD)
 
 ---
 
@@ -153,7 +203,7 @@ Após migração para Next.js, essa versão foi arquivada em:
 /legacy
 ```
 
-Mantida apenas para fins históricos e estudo da evolução arquitetural do projeto.
+Mantida para fins históricos e análise evolutiva do projeto.
 
 ---
 
@@ -196,12 +246,12 @@ http://localhost:3000
 Próximas etapas arquiteturais:
 
 - Persistência de conversas
-- Autenticação de usuários
 - Memória conversacional IA
-- Streaming de respostas em tempo real
+- Autenticação de usuários
+- Streaming de respostas
 - Rate limiting
-- Logs estruturados
 - Observabilidade
+- Logs estruturados
 - Transformação em Micro SaaS
 
 ---
@@ -209,10 +259,12 @@ Próximas etapas arquiteturais:
 ## 👨‍💻 Autor
 
 **Jair Sousa**  
-Formado em Análise e Desenvolvimento de Sistemas  
+Tecnólogo em Análise e Desenvolvimento de Sistemas  
 
 Foco em:
+
 - Backend Development
 - Node.js
 - Arquitetura de Software
 - Integração com Inteligência Artificial
+- Sistemas baseados em LLM
