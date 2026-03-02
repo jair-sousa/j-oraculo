@@ -2,11 +2,14 @@
  * server.js
  *
  * Arquivo principal da aplicação.
+ *
  * Responsável por:
  * - Carregar variáveis de ambiente
  * - Inicializar o servidor Express
  * - Configurar middlewares globais
+ * - Configurar CORS explicitamente
  * - Registrar rotas
+ * - Registrar middleware global de erro
  * - Inicializar o servidor HTTP
  */
 
@@ -20,15 +23,49 @@ const errorMiddleware = require("./middlewares/error.middleware");
 const app = express();
 
 /**
- * Middlewares globais
+ * Configuração explícita de CORS
+ *
+ * Define origens permitidas para evitar bloqueios
+ * em ambientes de produção (Vercel) e desenvolvimento local.
  */
-app.use(cors());
+const allowedOrigins = [
+  "https://j-oraculo.vercel.app",
+  "http://localhost:3000",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Origem não permitida por CORS"));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+    credentials: false,
+  })
+);
+
+/**
+ * Suporte explícito para preflight (OPTIONS)
+ * Evita falhas intermitentes após cold start.
+ */
+app.options("*", cors());
+
+/**
+ * Middleware para parsing de JSON
+ */
 app.use(express.json());
 
 /**
  * Health Check
- * Endpoint utilizado para monitoramento e keep-alive do servidor.
- * NÃO consome recursos externos (ex: Gemini).
+ *
+ * Endpoint leve para monitoramento e keep-alive.
+ * Não realiza chamadas externas.
  */
 app.get("/health", (req, res) => {
   res.status(200).json({
@@ -39,7 +76,7 @@ app.get("/health", (req, res) => {
 });
 
 /**
- * Registro de rotas
+ * Registro de rotas da aplicação
  */
 app.use("/", oraculoRoutes);
 
@@ -49,8 +86,11 @@ app.use("/", oraculoRoutes);
  */
 app.use(errorMiddleware);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
+/**
+ * Inicialização do servidor
+ */
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
